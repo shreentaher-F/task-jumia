@@ -24,7 +24,7 @@ class CustomerResource extends JsonResource
         return [
             'country'   => $response['country'],
             'state' => $response['state'],
-            'country_code' => $code,
+            'country_code' => "+{$code}",
             'phone' => last($arr)
         ];
     }

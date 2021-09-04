@@ -35,4 +35,9 @@ class CustomerController extends BaseController
 
         return $this->sendJson($countries);
     }
+
+    public function vueRoute()
+    {
+        return view('vueview');
+    }
 }
