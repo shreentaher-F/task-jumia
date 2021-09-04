@@ -23,6 +23,7 @@ trait ApiPaginator {
 		$paginator['meta']['per_page'] = $paginatedArray['per_page'];
 		$paginator['meta']['to'] = $paginatedArray['to'];
 		$paginator['meta']['total'] = $paginatedArray['total'];
+        $paginator['meta']['last_page'] = $paginatedArray['last_page'];
 		return $paginator;
 	}
 
