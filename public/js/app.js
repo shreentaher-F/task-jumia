@@ -2028,6 +2028,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2038,7 +2062,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         current_page: 1
       },
       links: {},
-      countries: []
+      countries: [],
+      collection: [],
+      filter: {
+        country: '',
+        state: ''
+      },
+      states: [{
+        key: true,
+        name: 'valid'
+      }, {
+        key: false,
+        name: 'not valid'
+      }]
     };
   },
   created: function created() {},
@@ -2056,8 +2092,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _services_RestService_js__WEBPACK_IMPORTED_MODULE_1__["default"].getAll("?page=".concat(_this.meta.current_page)).then(function (res) {
-                  _this.customers = res.data.data;
+                return _services_RestService_js__WEBPACK_IMPORTED_MODULE_1__["default"].getAll("?page=".concat(_this.meta.current_page, "&country_code=").concat(_this.filter.country)).then(function (res) {
+                  _this.customers = _this.collection = res.data.data;
                   _this.meta = res.data.meta;
                   _this.links = res.data.links;
                 })["catch"](function (err) {
@@ -2094,6 +2130,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee2);
       }))();
+    },
+    changeCountry: function changeCountry() {
+      // reset state first cause it work in current page of front
+      this.filter.state = '';
+      this.onPageChange(1);
+    },
+    changeState: function changeState(e) {
+      // let value = !!e.target.value // Boolean(e.target.value)
+      // filter current page in front
+      this.customers = this.collection.filter(function (obj) {
+        return obj.state == (e.target.value == 'true' ? true : false);
+      });
+    },
+    resetFilter: function resetFilter() {
+      this.filter = {
+        country: '',
+        state: ''
+      };
+      this.onPageChange(1);
     },
 
     /*
@@ -39105,6 +39160,144 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "row mb-4" }, [
+              _c("div", { staticClass: "col-md-5" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.filter.country,
+                        expression: "filter.country"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { "aria-label": "Default select example" },
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.filter,
+                            "country",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        },
+                        _vm.changeCountry
+                      ]
+                    }
+                  },
+                  [
+                    _c(
+                      "option",
+                      { attrs: { value: "", disabled: "", selected: "" } },
+                      [_vm._v("select country")]
+                    ),
+                    _vm._v(" "),
+                    _vm._l(_vm.countries, function(country, key) {
+                      return _c(
+                        "option",
+                        { key: key, domProps: { value: country.code } },
+                        [
+                          _vm._v(
+                            "\n                          " +
+                              _vm._s(country.name) +
+                              "\n                      "
+                          )
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-5" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.filter.state,
+                        expression: "filter.state"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { "aria-label": "Default select example" },
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.filter,
+                            "state",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        },
+                        _vm.changeState
+                      ]
+                    }
+                  },
+                  [
+                    _c(
+                      "option",
+                      { attrs: { value: "", disabled: "", selected: "" } },
+                      [_vm._v("select state")]
+                    ),
+                    _vm._v(" "),
+                    _vm._l(_vm.states, function(state, key) {
+                      return _c(
+                        "option",
+                        { key: key, domProps: { value: state.key } },
+                        [
+                          _vm._v(
+                            "\n                          " +
+                              _vm._s(state.name) +
+                              "\n                      "
+                          )
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-2" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-dark",
+                    attrs: { type: "button" },
+                    on: { click: _vm.resetFilter }
+                  },
+                  [_vm._v("reset")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
             _c("table", { staticClass: "table table-bordered table-hover" }, [
               _vm._m(0),
               _vm._v(" "),

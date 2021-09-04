@@ -15,7 +15,7 @@ class CustomerRepository
 
     function index ($filter)
     {
-        $customers = $this->customer->filter($filter)->paginate(10);
+        $customers = $this->customer->filter($filter)->paginate(5);
 
         return $customers;
     }

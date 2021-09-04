@@ -8,6 +8,30 @@
 
           <div class="card-body">
 
+            <div class="row mb-4">
+                <div class="col-md-5">
+                    <select class="form-control" aria-label="Default select example"
+                      v-model="filter.country" @change="changeCountry">
+                        <option value="" disabled selected>select country</option>
+                        <option v-for="(country, key) in countries" :key="key" :value="country.code">
+                            {{ country.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <select class="form-control" aria-label="Default select example"
+                      v-model="filter.state" @change="changeState">
+                        <option value="" disabled selected>select state</option>
+                        <option v-for="(state, key) in states" :key="key" :value="state.key">
+                            {{ state.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-dark" @click="resetFilter">reset</button>
+                </div>
+            </div>
+
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -73,7 +97,22 @@ export default {
                 current_page: 1
             },
             links: {},
-            countries: []
+            countries: [],
+            collection: [],
+            filter: {
+                country: '',
+                state: ''
+            },
+            states: [
+                {
+                    key: true,
+                    name: 'valid'
+                },
+                {
+                    key: false,
+                    name: 'not valid'
+                },
+            ]
         }
     },
     created () {
@@ -85,9 +124,10 @@ export default {
     },
     methods: {
         async getAll() {
-            await RestService.getAll(`?page=${this.meta.current_page}`)
+            await RestService.getAll(`?page=${this.meta.current_page}&country_code=${this.filter.country}`)
+
                 .then(res => {
-                    this.customers = res.data.data
+                    this.customers = this.collection = res.data.data
                     this.meta = res.data.meta
                     this.links = res.data.links
                 }).catch(err => {
@@ -101,6 +141,23 @@ export default {
                 }).catch(err => {
                 console.log(err)
             })
+        },
+        changeCountry () {
+            // reset state first cause it work in current page of front
+            this.filter.state = ''
+            this.onPageChange(1)
+        },
+        changeState (e) {
+            // let value = !!e.target.value // Boolean(e.target.value)
+            // filter current page in front
+            this.customers = this.collection.filter((obj) => obj.state == (e.target.value == 'true' ? true : false))
+        },
+        resetFilter () {
+            this.filter = {
+                country: '',
+                state: ''
+            }
+            this.onPageChange(1)
         },
         /*
         * Handle page-change event
